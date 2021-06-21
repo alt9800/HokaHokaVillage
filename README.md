@@ -1,0 +1,2 @@
+# HokaHokaVillage
+"ブログをホスティングする用"
