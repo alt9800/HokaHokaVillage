@@ -1,9 +1,3 @@
----
-layout: post
-title:  "Selection of it."
-categories: diary
----
-
 # ブログを始めた
 
 - オンラインでもGithubのWYSWINGなエディタが使えて
