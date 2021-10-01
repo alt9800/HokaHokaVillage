@@ -1,7 +1,6 @@
 ---
 layout: post
-title:  "選定理由など"
-date:   2021-0９-30 16:35:00 +0900
+title:  "Selection of it."
 categories: diary
 ---
 
