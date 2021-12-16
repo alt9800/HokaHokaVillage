@@ -22,7 +22,7 @@ title: ほかほか村(HokaHokaVillage)
 email: summer2017bioearthfusci@gmail.com
 description: >- # this means to ignore newlines until "baseurl:"    
   失敗したての情報を残していくぞ
-baseurl: "HokaHokaVillage" # the subpath of your site, e.g. /blog
+baseurl: "/HokaHokaVillage" # the subpath of your site, e.g. /blog
 url: "https://alt9800.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 twitter_username: ebiflyyyyyyyy
 github_username:  alt9800
