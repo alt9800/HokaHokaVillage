@@ -44,7 +44,21 @@ ssh isucon@{予選サーバ} -i {githubの鍵} 'curl -i http://localhost:19999'
 
 という感じでnetdataを確認できるようにしました。
 
+![image](https://user-images.githubusercontent.com/51439199/147847703-ed53e7d1-3467-4160-9c6d-32c632dbe0f4.png)
+
+
 (これほかの人たちどうやって毎回対処してるんですかね？)
+
+
+ちなみにサーバーのスペックはこんな感じでした。
+
+```
+
+OS: Ubuntu 20.04.3 LTS x86_64
+Intel Xeon Platinum 8275CL
+Memory 3723MiB
+
+```
 
 
 他のチームは初手の環境設定(例えばalpを入れたり)といったことを秘伝のシェルスクリプトやMakefileとして予め準備してる様子で、
@@ -54,7 +68,14 @@ ssh isucon@{予選サーバ} -i {githubの鍵} 'curl -i http://localhost:19999'
 点数自体の推移はいでさんのブログにもありますが、
 初手3000点スタートで、MySQLの設定(myconf)をいじりながらチューニングしていくとだいたい倍くらいまで点数が跳ねました。
 
+```bash:/etc/mysql/my.cnf
 
+# add setting (I/O dropping)
+innodb_flush_method = O_DIRECT
+innodb_flush_log_at_trx_commit = 2
+
+
+```
 
 
 アプリケーション側(我々はRubyを選択。いでさんがよしなに実装を切り替えてくれました。ありがとう！！！！！)のコードにはかなりヒントがコメントアウトされていて、
@@ -70,6 +91,8 @@ ssh isucon@{予選サーバ} -i {githubの鍵} 'curl -i http://localhost:19999'
 っていうかぶっちゃけ競技の本質にすらたどり着いてない感じはあるので、年度中に追試回したり、Go/Rustでの実装例をつついたりした話を追記していきたいです。
 
 
+
+
 # ISUCONにでるまでの準備について
 
 ## 公式
@@ -77,6 +100,7 @@ ssh isucon@{予選サーバ} -i {githubの鍵} 'curl -i http://localhost:19999'
 多くのチームが過去問を用いて勉強会を行っている他、今年度は事前にスポンサーのLINE社を中心として練習環境の提供やハンズオンセミナーが行われていました。
 
 宇宙海賊株式会社の草野さんが実際にisuconに出るにあたって毎回何をしていたのか、といった話をコンソールを見せてもらいながら聴けてよかったです。
+
 
 実際の環境に近いEC2インスタンスが用意されていたので、
 - どんなコマンドが通るか
@@ -102,12 +126,12 @@ ssh isucon@{予選サーバ} -i {githubの鍵} 'curl -i http://localhost:19999'
 
 ちなみに自分はDocker環境でmac内に環境を構築しました。
 
+
+
 ### 参考
 
- - [ISUCON9予選をDockerだけで動かす - Qiita]
-(https://qiita.com/suzuki_sh/items/6192647a6dd6d6c1b396)
-- [ローカル環境でISUCON9予選の問題を動かす : ISUCON公式Blog]
-(https://isucon.net/archives/53805209.html)
+ - [ISUCON9予選をDockerだけで動かす - Qiita](https://qiita.com/suzuki_sh/items/6192647a6dd6d6c1b396)
+- [ローカル環境でISUCON9予選の問題を動かす : ISUCON公式Blog](https://isucon.net/archives/53805209.html)
 
 公式でも案内はありますが、いくつか詰まったところがあるので追試のときにまた成文化しておこうと思います。
 
