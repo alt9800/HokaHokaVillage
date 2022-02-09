@@ -14,5 +14,23 @@ layout: home
 
 失敗したての情報を記載して行きます。
 
-
+<script src="three.r119.min.js"></script>
+<script src="vanta.fog.min.js"></script>
+<script>
+VANTA.FOG({
+  el: "#your-element-selector",
+  mouseControls: true,
+  touchControls: true,
+  gyroControls: false,
+  minHeight: 200.00,
+  minWidth: 200.00,
+  highlightColor: 0xe6c888,
+  midtoneColor: 0xffe1,
+  lowlightColor: 0x370ee8,
+  baseColor: 0x5ecfa7,
+  blurFactor: 0.29,
+  speed: 1.50,
+  zoom: 2.20
+})
+</script>
 
