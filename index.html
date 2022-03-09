@@ -15,23 +15,17 @@ layout: home
 失敗したての情報を記載して行きます。
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+<script src="../scripts/three.r119.min.js"></script>
+<script src="../scripts/vanta.clouds.min.js"></script>
 <script>
-var setVanta = ()=>{
-if (window.VANTA) window.VANTA.CLOUDS({
-  el: ".s-page-1 .s-section-1 .s-section",
+VANTA.CLOUDS({
+  el: "#your-element-selector",
   mouseControls: true,
   touchControls: true,
   gyroControls: false,
   minHeight: 200.00,
   minWidth: 200.00,
   skyColor: 0xd7af68
-})
-}
-_strk.push(function() {
-  setVanta()
-  window.edit_page.Event.subscribe( "Page.beforeNewOneFadeIn", setVanta )
 })
 </script>
 
