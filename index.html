@@ -10,21 +10,23 @@ layout: home
 </a>
 
 
-## このブログについて
+<div id="clouds">失敗したての情報を記載して行きます。</div>
 
-失敗したての情報を記載して行きます。
-
-
-<script src="./scripts/three.r119.min.js"></script>
-<script src="./scripts/vanta.clouds.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
 <script>
 VANTA.CLOUDS({
-  el: "#your-element-selector",
+  el: "#clouds",
   mouseControls: true,
   touchControls: true,
   gyroControls: false,
   minHeight: 200.00,
   minWidth: 200.00,
-  skyColor: 0xd7af68
+  backgroundColor: 0xb0d7a1,
+  skyColor: 0xd78f68,
+  cloudColor: 0x8eabd7,
+  cloudShadowColor: 0x692d57,
+  sunlightColor: 0xd7b18b,
+  speed: 0.50
 })
 </script>
