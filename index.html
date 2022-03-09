@@ -29,5 +29,9 @@ if (window.VANTA) window.VANTA.CLOUDS({
   skyColor: 0xd7af68
 })
 }
+_strk.push(function() {
+  setVanta()
+  window.edit_page.Event.subscribe( "Page.beforeNewOneFadeIn", setVanta )
+})
 </script>
 
