@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Welcome to Jekyll!"
+title:  "Welcome to Jekyll!(テンプレート)"
 date:   2021-08-26 02:35:09 +0900
 categories: jekyll update
 ---

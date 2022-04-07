@@ -1,3 +1,10 @@
+---
+layout: post
+title:  "このブログについて"
+date:   2021-09-30 02:35:09 +0900
+categories: jekyll update
+---
+
 # ブログを始めた
 
 - オンラインでもGithubのWYSWINGなエディタが使えて
