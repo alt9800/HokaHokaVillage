@@ -70,8 +70,13 @@ netdataの様子やMySQLの様子をローカルでビジュアルで確認で�
 ssh  -L 8001:localhost:19999 isucon@{ipアドレス} -i ~/.ssh/{鍵の名前}
 ```
 
+![image](https://user-images.githubusercontent.com/51439199/180804768-5f65e7e6-bbf5-4e6b-aa81-97f569175c45.png)
+
+
 
 MariaDBに拡張してあるときはこんな感じで接続できたんですが、今回はテーブルでの指定方法がわからんずくでした。(ISUCON11予選のもの)
+
+![image](https://user-images.githubusercontent.com/51439199/180805194-f43a404c-8a62-4128-94c8-e130214ff816.png)
 
 ちなみに、MySQLでは`localhost`と`127.0.0.1`が厳密に区別される、という話があり、リモートのMySQL側で127.0.0.1ポートの参照許可を与えて置かないとローカルから接続ができないみたいです。
 
@@ -81,6 +86,9 @@ MariaDBに拡張してあるときはこんな感じで接続できたんです�
 手動でログを入力すべくGoogle Form用意。
 
 ちなみに得点の推移は以下。
+
+![score](https://user-images.githubusercontent.com/51439199/180804515-afb06a23-24db-439f-a88d-3dded932b5c0.png)
+
 初期のGoの実装が一番得点があるのはかなり精神的に来ました。
 
 去年出たときはmy.cnfの `max_connection` や `key_buffer`だったり`record_buffer`をいじるだけで得点が跳ねたんですが、このあたりも推測でイジると良くなさそうです。(あたりまえ体操)
