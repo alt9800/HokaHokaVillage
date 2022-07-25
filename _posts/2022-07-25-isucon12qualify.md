@@ -10,10 +10,10 @@ categories: isucon
 
 2021年に引き続いてDB周りのお掃除をしてみたかったので出場しました。
 
-# やったこと/やろうとしたこと
+## やったこと/やろうとしたこと
 
 
-## 説明書を読んでベンチを回す (一般)
+### 説明書を読んでベンチを回す (一般)
 
 問題は[リンク集](https://isucon.net/archives/56571716.htm)から。 (準備中)
 
@@ -58,48 +58,40 @@ categories: isucon
 ```
 
 
-## 秘伝のタレを効かせる (一般)
+### 秘伝のタレを効かせる (一般)
 といってもいきあたりばったりで前日に用意したものでalpだったりnetdataをインストールするコマンドくらいしか書いてないシェルスクリプトを動かすだけ。
 
-## TCP/IP over SSH でリモートの様子をローカルに配信 (お茶くみ)
+### TCP/IP over SSH でリモートの様子をローカルに配信 (お茶くみ)
 netdataの様子やMySQLの様子をローカルでビジュアルで確認できるようにしました。
 
 ```sh:いつもの
 ssh  -L 8001:localhost:19999 isucon@{ipアドレス} -i ~/.ssh/{鍵の名前}
 ```
 
-![image](https://user-images.githubusercontent.com/51439199/180804768-5f65e7e6-bbf5-4e6b-aa81-97f569175c45.png)
-
 
 MariaDBに拡張してあるときはこんな感じで接続できたんですが、今回はテーブルでの指定方法がわからんずくでした。(ISUCON11予選のもの)
-MySQLでは`localhost`と`127.0.0.1` (と`%`)が厳密に区別される、という話があり、リモートのMySQL側で127.0.0.1ポートの参照許可を与えて置かないとローカルから接続ができないみたいです。
 
-![image](https://user-images.githubusercontent.com/51439199/180805194-f43a404c-8a62-4128-94c8-e130214ff816.png)
-
+ちなみに、MySQLでは`localhost`と`127.0.0.1`が厳密に区別される、という話があり、リモートのMySQL側で127.0.0.1ポートの参照許可を与えて置かないとローカルから接続ができないみたいです。
 
 
-## 得点の推移をスプレッドシートに吐くように (お茶くみ)
+### 得点の推移をスプレッドシートに吐くように (お茶くみ)
 
 手動でログを入力すべくGoogle Form用意。
 
 ちなみに得点の推移は以下。
-
-![score](https://user-images.githubusercontent.com/51439199/180804515-afb06a23-24db-439f-a88d-3dded932b5c0.png)
-
-
 初期のGoの実装が一番得点があるのはかなり精神的に来ました。
 去年出たときはmy.cnfの `max_connection` や `key_buffer`だったり`record_buffer`をいじるだけで得点が跳ねたんですが、このあたりも推測でイジると良くなさそうです。(あたりまえ体操)
 
 
 
-## nginxで静的アセットを配信する (リバースプロキシ)
+### nginxで静的アセットを配信する (リバースプロキシ)
 何も考えずにnginxでcssやjsを配信するようにしました。
 そもそもリクエスト自体を捌ききれてないので返ってスコアが悪化してしまいました。
 
-## スロークエリログを吐かせる (DB)
+### スロークエリログを吐かせる (DB)
 やるだけ。
 
-## スロークエリログを解析する (DB)
+### スロークエリログを解析する (DB)
 どうやらコイツらが悪さしている模様
 
 ```
@@ -118,7 +110,7 @@ Count: 14  Time=0.01s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@localh
   administrator command: Quit
 ```
 
-## たくさん読まれてるカラムにインデックスを貼る
+### たくさん読まれてるカラムにインデックスを貼る
 
 `visit_history`くんを見てみると、
 
@@ -138,9 +130,10 @@ Count: 14  Time=0.01s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@localh
 
 
 
-# 感想
+## 感想
 
 最近SQLiteからMySQLへのお引越しをDjango環境で行ったんですが、ぜんぜん活かせてなかったのが悔しいです。
+
 
 dump.jsonみたいなのを使ってぽちぽちお引越しできるものだと思っていたのですが、複雑な構造になるとそうはいかない...みたいですね。
 
@@ -151,25 +144,14 @@ dump.jsonみたいなのを使ってぽちぽちお引越しできるものだ�
 
 
 
+## ISUCON反省会(2022-07-28)
 
 さて、鉄は熱いうちに打て、というわけで近所のハッカースペースを借りて反省会をします。
 
-ハイブリッド配信の設備があって、とりあえずは「LT会」名目で申し込みましたが、
-
-多分誰も集まらないので一人でISUCON10予選の問題やったり参考実装をElixirで再現頑張ったりしてると思います。
+ハイブリッド配信の設備があって、とりあえずは「LT会」名目で申し込みましたが、多分誰も集まらないので一人でISUCON10予選の問題やったり参考実装をElixirで再現頑張ったりしてると思います。
 
 
-
-ISUCON反省会(2022-07-28)
-https://connpass.com/event/253766/
-
-
-
-
-<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ISUCON12予選の反省会やるよ〜〜ん<br><br>7/28 (木) 19:00~<br><br>オンライン参加者にはzoomリンク送るです<a href="https://t.co/19weu7NQj4">https://t.co/19weu7NQj4</a></p>&mdash; 呼吸 (@ebiflyyyyyyyy) <a href="https://twitter.com/ebiflyyyyyyyy/status/1551580587634601984?ref_src=twsrc%5Etfw">July 25, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-
-
-
+[https://connpass.com/event/253766/](https://connpass.com/event/253766/)
 
 ほなまた。
 
