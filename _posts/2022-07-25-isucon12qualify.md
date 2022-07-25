@@ -10,6 +10,8 @@ categories: isucon
 
 2021年に引き続いてDB周りのお掃除をしてみたかったので出場しました。
 
+----
+
 ## やったこと/やろうとしたこと
 
 
@@ -130,7 +132,7 @@ Count: 14  Time=0.01s (0s)  Lock=0.00s (0s)  Rows=0.0 (0), isucon[isucon]@localh
 
 って感じで、`player_id`にインデックス貼ってみたいんですが効果あったんですかね...?(推測するな計測せよ)
 
-
+----
 
 ## 感想
 
@@ -144,7 +146,7 @@ dump.jsonみたいなのを使ってぽちぽちお引越しできるものだ�
 
 アプリケーションロジックの方を優先して、N+1っぽくなってるところを誘導に乗って捌けばよかったもののつまらないこだわり方をしたなと思いつつも、DBの解析はなかなか普段からやってないと時間を食うことを身を以て学べました。
 
-
+----
 
 ## ISUCON反省会(2022-07-28)
 
@@ -154,6 +156,9 @@ dump.jsonみたいなのを使ってぽちぽちお引越しできるものだ�
 
 
 [https://connpass.com/event/253766/](https://connpass.com/event/253766/)
+
+<blockquote class="twitter-tweet"><p lang="ja" dir="ltr">ISUCON12予選の反省会やるよ〜〜ん<br><br>7/28 (木) 19:00~<br><br>オンライン参加者にはzoomリンク送るです<a href="https://t.co/19weu7NQj4">https://t.co/19weu7NQj4</a></p>&mdash; 呼吸 (@ebiflyyyyyyyy) <a href="https://twitter.com/ebiflyyyyyyyy/status/1551580587634601984?ref_src=twsrc%5Etfw">July 25, 2022</a></blockquote> <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
 
 ほなまた。
 
