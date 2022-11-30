@@ -19,3 +19,5 @@ Raspberry Pi2で使いたい場合問題があります。
 Raspberry Pi2にはWifiのアンテナがついておらず、
 USBのWifiアンテナを接続させる必要があります。
 
+
+(書きかけ)
