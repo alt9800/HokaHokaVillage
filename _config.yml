@@ -33,7 +33,10 @@ plugins:
   - jekyll-feed
   - jekyll-sitemap
   - jekyll-seo-tag
-  
+
+assets:
+  css: /assets/css
+
 sass:
   sass_dir: _sass
   #style: compressed
