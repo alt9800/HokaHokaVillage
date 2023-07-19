@@ -14,7 +14,8 @@ AdminのいでさんとKokura.rbを立ち上げて一年が経ちましたので
 
 ブランチの元になった[Fukuoka.rb](https://fukuokarb.connpass.com/)でもプログラミング初学者の方を中心に「なにかプラクティスの場所がほしい」、というようなコメントがときどき見かけられたので、本編のもくもく会スタイルに対して、こちらはテーマを決めた勉強会としてデザインしています。
 
-{ブランチの図}
+![Frame 3pic-rbcom](https://github.com/alt9800/HokaHokaVillage/assets/51439199/0c5c532a-5499-4760-a62a-5e2f67e7aca5)
+
 
 さしあたり、なかなか機会がないと学ばないアルゴリズムやデータ構造に触れられる場所を作りたいという気持ちがあり、スタートダッシュに協力しました。
 
@@ -31,9 +32,14 @@ AdminのいでさんとKokura.rbを立ち上げて一年が経ちましたので
 
 イベントは毎回基本Discordで進めています。
 
-{雑談と告知だけのシンプルな構造}
+![image](https://github.com/alt9800/HokaHokaVillage/assets/51439199/56974db1-4b90-418a-8c55-7d4a9ed7ed20)
+
+(雑談と告知だけのシンプルな構造)
 
 Knowledgeはいでさんの取り計らいでesaが使えるようになっていて、このブログを書いている時点で15回分の振り返りログがesa上に溜まっています。
+
+![image](https://github.com/alt9800/HokaHokaVillage/assets/51439199/ee6c7aaf-18aa-48b0-b4bf-1ed352d459f1)
+
 
 資料は[こちら(問題解決のための「アルゴリズム×数学」が基礎からしっかり身につく本 米田優峻　著)](https://gihyo.jp/book/2022/978-4-297-12521-9)で、[AtCoder](https://atcoder.jp/contests/math-and-algorithm)を用いて各々の得意な言語で自動ジャッジがなされる環境でコードを書くことができたり、PDF版が用意されていることが教材策定の決め手でした。
 
