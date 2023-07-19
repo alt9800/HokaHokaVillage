@@ -1,7 +1,7 @@
 ---
 layout: post
 title:  "Kokura.rb 1周年に寄せて"
-date:   2021-07-19 00:00:00 +0900
+date:   2023-07-19 00:00:00 +0900
 categories: blog ruby community
 ---
 僭越ながら[Kokura.rb](https://kokurarb.connpass.com/)の運営のひとりをやっておりますAlt9800です。
