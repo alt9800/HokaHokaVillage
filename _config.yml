@@ -37,10 +37,6 @@ plugins:
 assets:
   css: /assets/css
 
-sass:
-  sass_dir: _sass
-  #style: compressed
-  style: compact
 
 # Exclude from processing.
 # The following items will not be processed, by default.
