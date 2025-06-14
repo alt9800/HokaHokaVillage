@@ -27,15 +27,16 @@ url: "https://alt9800.github.io/HokaHokaVillage" # the base hostname & protocol 
 twitter_username: ebiflyyyyyyyy
 github_username:  alt9800
 
-# Build settings
-theme: minima
-plugins:
-  - jekyll-feed
-  - jekyll-sitemap
-  - jekyll-seo-tag
+# Zen Village テーマ設定
+theme_config:
+  zen_village:
+    enable_dark_mode: true
+    vanta_effect: "waves"
+    
+# パフォーマンス設定
+sass:
+  style: compressed
 
-assets:
-  css: /assets/css
 
 
 # Exclude from processing.

@@ -4,14 +4,46 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>{% if page.title %}{{ page.title }} | {% endif %}{{ site.title }}</title>
+    <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
     
-    <!-- シンプルに CSS を読み込み -->
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    
+    <!-- Favicon -->
     <link rel="shortcut icon" href="{{ '/favicon.ico' | relative_url }}">
+    
+    <!-- SEO -->
+    {% seo %}
 </head>
 <body>
     <div class="content">
-        {{ content }}
+        <!-- サイトヘッダー -->
+        <header style="text-align: center; margin-bottom: 3em;">
+            <h1 style="margin-bottom: 0.5em;">
+                <a href="{{ '/' | relative_url }}" style="border: none; color: var(--text-primary);">
+                    {{ site.title }}
+                </a>
+            </h1>
+            {% if site.description %}
+                <p style="color: var(--text-muted); font-size: 0.9em; margin-top: 0;">
+                    {{ site.description }}
+                </p>
+            {% endif %}
+        </header>
+        
+        <!-- メインコンテンツ -->
+        <main>
+            {{ content }}
+        </main>
+        
+        <!-- フッター -->
+        <footer style="text-align: center; margin-top: 4em; padding-top: 2em; border-top: 1px solid var(--border-color);">
+            <p style="color: var(--text-muted); font-size: 0.85em;">
+                © {{ 'now' | date: "%Y" }} {{ site.title }} | 
+                <a href="{{ '/about/' | relative_url }}">About</a> | 
+                <a href="https://github.com/{{ site.github_username }}">GitHub</a>
+            </p>
+        </footer>
     </div>
 </body>
 </html>
