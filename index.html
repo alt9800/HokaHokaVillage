@@ -20,23 +20,48 @@ layout: default
     </div>
 
     <div id="osmDisplay" style="display: none;">
-        <div class="osm-grid" id="osmGrid"></div>
+        <div class="summary" id="summary">
+            Loading mapping activity...
+        </div>
+
+        <div class="grid-container">
+            <!-- 曜日ラベル -->
+            <div class="weekday-labels">
+                <div class="weekday-label"></div>
+                <div class="weekday-label">M</div>
+                <div class="weekday-label"></div>
+                <div class="weekday-label">W</div>
+                <div class="weekday-label"></div>
+                <div class="weekday-label">F</div>
+                <div class="weekday-label"></div>
+            </div>
+
+            <!-- グリッドエリア -->
+            <div class="grid-wrapper">
+                <!-- 月ラベル -->
+                <div class="month-labels" id="monthLabels"></div>
+                
+                <!-- 週コンテナ -->
+                <div class="weeks-container" id="weeksContainer"></div>
+            </div>
+        </div>
 
         <div class="stats">
             <div id="totalContributions">Loading...</div>
             <div class="legend">
-                Less 
-                <div class="legend-item" style="opacity: 0.1;"></div>
-                <div class="legend-item" style="opacity: 0.3;"></div>
-                <div class="legend-item" style="opacity: 0.6;"></div>
-                <div class="legend-item" style="opacity: 1;"></div>
-                More
+                <span>Less</span>
+                <div class="legend-item" style="background-color: var(--grid-color-empty);"></div>
+                <div class="legend-item" style="background-color: var(--grid-color-1);"></div>
+                <div class="legend-item" style="background-color: var(--grid-color-2);"></div>
+                <div class="legend-item" style="background-color: var(--grid-color-3);"></div>
+                <div class="legend-item" style="background-color: var(--grid-color-4);"></div>
+                <span>More</span>
             </div>
         </div>
     </div>
 </div>
 
-<!-- 最新の投稿 -->
+<!-- 最新の投稿セクション -->
 {% if site.posts.size > 0 %}
 <section style="margin: 4em 0;">
     <h2 style="font-weight: 400; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5em; display: flex; align-items: center; gap: 0.5em;">
@@ -90,20 +115,40 @@ layout: default
 const OSM_USERNAME = 'Alt9800';
 let osmData = {};
 
-// 透明度計算
-function calculateOpacity(contributions) {
-    if (contributions === 0) return 1.0;
-    if (contributions >= 100) return 0;
+// 貢献度レベル計算
+function getContributionLevel(contributions) {
+    if (contributions === 0) return 0;
+    if (contributions <= 3) return 1;
+    if (contributions <= 6) return 2;
+    if (contributions <= 9) return 3;
+    return 4;
+}
+
+// OSM プロフィールページを開く
+function openOSMProfile() {
+    window.open(\`https://hdyc.neis-one.org/?\${OSM_USERNAME}\`, '_blank');
+}
+
+// ツールチップ表示
+function showTooltip(e, date, contributions) {
+    const tooltip = document.getElementById('tooltip');
+    const dateObj = new Date(date);
+    const formattedDate = dateObj.toLocaleDateString('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric'
+    });
     
-    const levels = [1, 2, 3, 5, 8, 13, 21, 34, 55, 89];
-    const opacities = [0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1, 0.05];
-    
-    for (let i = 0; i < levels.length; i++) {
-        if (contributions <= levels[i]) {
-            return opacities[i];
-        }
-    }
-    return 0.05;
+    const contributionText = contributions === 1 ? 'contribution' : 'contributions';
+    tooltip.innerHTML = \`<strong>\${contributions} \${contributionText}</strong><br>\${formattedDate}\`;
+    tooltip.style.opacity = '1';
+    tooltip.style.left = (e.pageX + 10) + 'px';
+    tooltip.style.top = (e.pageY - 50) + 'px';
+}
+
+function hideTooltip() {
+    document.getElementById('tooltip').style.opacity = '0';
 }
 
 // 過去365日の日付配列を生成
@@ -119,41 +164,16 @@ function getLast365Days() {
     return dates;
 }
 
-// OSM プロフィールページを開く
-function openOSMProfile() {
-    window.open(`https://hdyc.neis-one.org/?${OSM_USERNAME}`, '_blank');
-}
-
-// ツールチップ表示
-function showTooltip(e, date, contributions) {
-    const tooltip = document.getElementById('tooltip');
-    const dateObj = new Date(date);
-    const formattedDate = dateObj.toLocaleDateString('ja-JP', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric'
-    });
-    
-    tooltip.innerHTML = `${formattedDate}<br>${contributions} contributions`;
-    tooltip.style.opacity = '1';
-    tooltip.style.left = (e.pageX + 10) + 'px';
-    tooltip.style.top = (e.pageY - 40) + 'px';
-}
-
-function hideTooltip() {
-    document.getElementById('tooltip').style.opacity = '0';
-}
-
 // OSM データ取得
 async function fetchOSMData() {
     try {
-        const query = `[out:json][timeout:120];
+        const query = \`[out:json][timeout:120];
 (
-  node(user:"${OSM_USERNAME}");
-  way(user:"${OSM_USERNAME}");
-  relation(user:"${OSM_USERNAME}");
+  node(user:"\${OSM_USERNAME}");
+  way(user:"\${OSM_USERNAME}");
+  relation(user:"\${OSM_USERNAME}");
 );
-out meta;`;
+out meta;\`;
 
         console.log('Fetching OSM data for', OSM_USERNAME);
         
@@ -166,7 +186,7 @@ out meta;`;
         });
 
         if (!response.ok) {
-            throw new Error(`HTTP ${response.status}`);
+            throw new Error(\`HTTP \${response.status}\`);
         }
 
         const data = await response.json();
@@ -219,24 +239,16 @@ function generateFallbackData() {
         const dayOfWeek = new Date(date).getDay();
         const month = new Date(date).getMonth();
         
-        let probability = 0.02;
-        if (dayOfWeek === 0 || dayOfWeek === 6) probability += 0.08;
-        if (month >= 3 && month <= 8) probability += 0.05;
+        let probability = 0.3;
+        if (dayOfWeek === 0 || dayOfWeek === 6) probability += 0.2;
+        if (month >= 3 && month <= 8) probability += 0.1;
         
         if (Math.random() < probability) {
-            const values = [1, 2, 3, 5, 8, 13, 21, 34, 55];
-            const weights = [40, 25, 15, 8, 5, 3, 2, 1, 1];
-            
-            let random = Math.random() * 100;
-            let cumulative = 0;
-            
-            for (let i = 0; i < values.length; i++) {
-                cumulative += weights[i];
-                if (random < cumulative) {
-                    fallbackData[date] = values[i];
-                    break;
-                }
-            }
+            const rand = Math.random();
+            if (rand < 0.4) fallbackData[date] = 1;
+            else if (rand < 0.7) fallbackData[date] = Math.floor(Math.random() * 5) + 2;
+            else if (rand < 0.9) fallbackData[date] = Math.floor(Math.random() * 10) + 6;
+            else fallbackData[date] = Math.floor(Math.random() * 35) + 10;
         } else {
             fallbackData[date] = 0;
         }
@@ -245,30 +257,119 @@ function generateFallbackData() {
     return fallbackData;
 }
 
-// グリッド表示
-function displayGrid(data) {
-    const grid = document.getElementById('osmGrid');
+// GitHub風グリッド表示
+function displayGitHubStyleGrid(data) {
     const dates = getLast365Days();
+    const weeksContainer = document.getElementById('weeksContainer');
+    const monthLabels = document.getElementById('monthLabels');
     
-    grid.innerHTML = '';
+    weeksContainer.innerHTML = '';
+    monthLabels.innerHTML = '';
+
+    // 週ごとにデータを整理
+    const weeks = [];
+    let currentWeek = [];
     
+    // 最初の日の曜日を取得（日曜日 = 0）
+    const firstDate = new Date(dates[0]);
+    const firstDayOfWeek = firstDate.getDay();
+    
+    // 最初の週の空白日を追加
+    for (let i = 0; i < firstDayOfWeek; i++) {
+        currentWeek.push(null);
+    }
+    
+    // 日付を週ごとに分割
     dates.forEach(date => {
-        const day = document.createElement('div');
-        day.className = 'osm-day';
-        
-        const contributions = data[date] || 0;
-        day.style.opacity = calculateOpacity(contributions);
-        
-        day.addEventListener('mouseenter', (e) => showTooltip(e, date, contributions));
-        day.addEventListener('mouseleave', hideTooltip);
-        
-        grid.appendChild(day);
+        currentWeek.push(date);
+        if (currentWeek.length === 7) {
+            weeks.push(currentWeek);
+            currentWeek = [];
+        }
     });
     
-    const total = Object.values(data).reduce((sum, val) => sum + val, 0);
-    document.getElementById('totalContributions').textContent = 
-        `${total.toLocaleString()} contributions in the last year`;
+    // 最後の週が7日未満の場合、空白で埋める
+    if (currentWeek.length > 0) {
+        while (currentWeek.length < 7) {
+            currentWeek.push(null);
+        }
+        weeks.push(currentWeek);
+    }
+
+    // 月ラベルを生成
+    const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 
+                      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    let currentMonth = -1;
+    let monthPositions = [];
     
+    weeks.forEach((week, weekIndex) => {
+        const firstValidDate = week.find(d => d !== null);
+        if (firstValidDate) {
+            const month = new Date(firstValidDate).getMonth();
+            if (month !== currentMonth) {
+                monthPositions.push({
+                    month: monthNames[month],
+                    position: weekIndex
+                });
+                currentMonth = month;
+            }
+        }
+    });
+
+    // 月ラベルを配置
+    monthPositions.forEach((monthPos, index) => {
+        const monthLabel = document.createElement('div');
+        monthLabel.className = 'month-label';
+        monthLabel.textContent = monthPos.month;
+        
+        // 幅を計算（次の月までの週数）
+        const nextPos = monthPositions[index + 1];
+        const weekCount = nextPos ? nextPos.position - monthPos.position : weeks.length - monthPos.position;
+        monthLabel.style.width = \`\${weekCount * 13}px\`; // 11px + 2px gap
+        
+        monthLabels.appendChild(monthLabel);
+    });
+
+    // 週のカラムを生成
+    weeks.forEach(week => {
+        const weekColumn = document.createElement('div');
+        weekColumn.className = 'week-column';
+        
+        week.forEach(date => {
+            const dayElement = document.createElement('div');
+            dayElement.className = 'grid-day';
+            
+            if (date) {
+                const contributions = data[date] || 0;
+                const level = getContributionLevel(contributions);
+                dayElement.setAttribute('data-level', level);
+                
+                // イベントリスナー
+                dayElement.addEventListener('mouseenter', (e) => 
+                    showTooltip(e, date, contributions));
+                dayElement.addEventListener('mouseleave', hideTooltip);
+            } else {
+                // 空白日は非表示
+                dayElement.style.visibility = 'hidden';
+            }
+            
+            weekColumn.appendChild(dayElement);
+        });
+        
+        weeksContainer.appendChild(weekColumn);
+    });
+
+    // 統計更新
+    const total = Object.values(data).reduce((sum, val) => sum + val, 0);
+    const mappingDays = Object.values(data).filter(val => val > 0).length;
+    
+    document.getElementById('summary').textContent = 
+        \`\${mappingDays} mapping days with \${total.toLocaleString()} changesets in the last year\`;
+    
+    document.getElementById('totalContributions').textContent = 
+        \`\${total.toLocaleString()} contributions in the last year\`;
+    
+    // 表示
     document.getElementById('loadingIndicator').style.display = 'none';
     document.getElementById('osmDisplay').style.display = 'block';
 }
@@ -278,11 +379,11 @@ async function init() {
     try {
         const data = await fetchOSMData();
         osmData = data;
-        displayGrid(osmData);
+        displayGitHubStyleGrid(osmData);
     } catch (error) {
         console.error('Failed to initialize:', error);
         osmData = generateFallbackData();
-        displayGrid(osmData);
+        displayGitHubStyleGrid(osmData);
     }
 }
 
