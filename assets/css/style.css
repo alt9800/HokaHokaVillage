@@ -266,7 +266,7 @@ th {
     100% { transform: rotate(360deg); }
 }
 
-/* OSM Grid */
+/* OSM Grid Colors */
 :root {
     --grid-color-empty: #ebedf0;
     --grid-color-1: #9be9a8;
@@ -275,6 +275,7 @@ th {
     --grid-color-4: #216e39;
 }
 
+/* OSM Activity Container */
 .osm-activity-container {
     background: var(--bg-accent);
     border: 1px solid var(--border-color);
@@ -302,50 +303,15 @@ th {
     font-size: 14px;
 }
 
-.grid-container {
-    display: flex;
-    gap: 3px;
+/* シンプルなグリッド - 53週×7日 */
+.simple-grid {
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    grid-template-rows: repeat(7, 1fr);
+    gap: 2px;
     margin: 1em 0;
+    max-width: 100%;
     overflow-x: auto;
-}
-
-.weekday-labels {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-    padding-right: 10px;
-    font-size: 9px;
-    color: var(--text-muted);
-    line-height: 11px;
-}
-
-.weekday-label {
-    height: 11px;
-    display: flex;
-    align-items: center;
-}
-
-.grid-wrapper {
-    flex: 1;
-}
-
-.month-labels {
-    display: flex;
-    margin-bottom: 2px;
-    font-size: 10px;
-    color: var(--text-muted);
-    height: 15px;
-}
-
-.weeks-container {
-    display: flex;
-    gap: 2px;
-}
-
-.week-column {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
 }
 
 .grid-day {
@@ -354,10 +320,12 @@ th {
     border-radius: 2px;
     background-color: var(--grid-color-empty);
     cursor: pointer;
+    transition: all 0.2s ease;
 }
 
 .grid-day:hover {
     outline: 1px solid rgba(0, 0, 0, 0.3);
+    transform: scale(1.1);
 }
 
 .grid-day[data-level="0"] { background-color: var(--grid-color-empty); }
@@ -377,6 +345,7 @@ th {
     z-index: 1000;
     opacity: 0;
     white-space: nowrap;
+    transition: opacity 0.2s;
 }
 
 .stats {
@@ -386,6 +355,8 @@ th {
     margin-top: 1em;
     font-size: 12px;
     color: var(--text-secondary);
+    flex-wrap: wrap;
+    gap: 1em;
 }
 
 .legend {
@@ -402,16 +373,12 @@ th {
 }
 
 @media (max-width: 768px) {
+    .simple-grid {
+        grid-template-columns: repeat(26, 1fr);
+    }
+    
     .grid-day {
         width: 8px;
         height: 8px;
-    }
-    
-    .weekday-labels {
-        font-size: 8px;
-    }
-    
-    .month-labels {
-        font-size: 9px;
     }
 }
