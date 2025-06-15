@@ -218,3 +218,103 @@ th {
     --link-hover: #f7fafc;
   }
 }
+
+/* OSM Activity Grid Styles */
+.osm-activity-container {
+    background: var(--bg-accent);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2em;
+    margin: 3em 0;
+    box-shadow: 0 4px 20px var(--shadow-medium);
+    position: relative;
+    overflow: hidden;
+}
+
+.osm-activity-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(135deg, 
+        rgba(52, 58, 64, 0.02) 0%,
+        rgba(108, 117, 125, 0.01) 50%,
+        rgba(52, 58, 64, 0.02) 100%);
+    pointer-events: none;
+}
+
+.month-labels {
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    gap: 1px;
+    margin-bottom: 0.5em;
+    font-size: 0.75em;
+    color: var(--text-muted);
+    position: relative;
+    z-index: 1;
+}
+
+.osm-grid {
+    display: grid;
+    grid-template-columns: repeat(53, 1fr);
+    gap: 2px;
+    width: 100%;
+    margin: 1em 0;
+    position: relative;
+    z-index: 1;
+}
+
+.osm-day {
+    aspect-ratio: 1;
+    background: var(--text-primary);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+}
+
+.osm-day:hover {
+    transform: scale(1.2);
+    box-shadow: 0 2px 8px var(--shadow-medium);
+    z-index: 10;
+}
+
+.legend-item {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--text-primary);
+}
+
+/* レスポンシブ対応 */
+@media (max-width: 768px) {
+    .osm-grid {
+        grid-template-columns: repeat(26, 1fr);
+        gap: 1px;
+    }
+    
+    .month-labels {
+        grid-template-columns: repeat(6, 1fr);
+        font-size: 0.7em;
+    }
+    
+    .osm-activity-container {
+        padding: 1.5em;
+    }
+    
+    .legend-item {
+        width: 10px;
+        height: 10px;
+    }
+}
+
+/* パフォーマンス最適化 */
+.osm-day {
+    will-change: transform, opacity;
+}
+
+.osm-grid {
+    contain: layout style paint;
+}
