@@ -1,0 +1,96 @@
+---
+layout: default
+title: "すべての記録"
+permalink: /posts/
+---
+
+<h1>すべての記録</h1>
+<p style="color: var(--text-muted);">これまでの失敗と学びの軌跡</p>
+
+<!-- カテゴリー別フィルター（オプション） -->
+<div style="margin: 2em 0; text-align: center;">
+    <button onclick="filterPosts('all')" class="filter-btn active">すべて</button>
+    {% assign categories = site.categories | sort %}
+    {% for category in categories %}
+        <button onclick="filterPosts('{{ category[0] }}')" class="filter-btn">
+            {{ category[0] }} ({{ category[1].size }})
+        </button>
+    {% endfor %}
+</div>
+
+<!-- 年別グループ表示 -->
+{% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" %}
+{% for year in posts_by_year %}
+    <section style="margin: 3em 0;">
+        <h2 style="color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5em;">
+            {{ year.name }}年
+        </h2>
+        
+        {% for post in year.items %}
+            <article class="post-item" data-category="{{ post.categories | join: ' ' }}" 
+                     style="display: flex; align-items: center; padding: 1em; margin: 0.5em 0; background: var(--bg-accent); border-radius: 6px; border: 1px solid var(--border-color);">
+                
+                <time style="color: var(--text-muted); font-size: 0.85em; width: 80px; flex-shrink: 0;">
+                    {{ post.date | date: "%m/%d" }}
+                </time>
+                
+                <div style="flex: 1; margin-left: 1em;">
+                    <h3 style="margin: 0; font-size: 1.1em; font-weight: 400;">
+                        <a href="{{ post.url | relative_url }}" style="color: var(--text-primary);">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+                    
+                    {% if post.categories.size > 0 %}
+                        <div style="margin-top: 0.5em;">
+                            {% for category in post.categories %}
+                                <span style="background: var(--bg-secondary); color: var(--text-muted); padding: 0.2em 0.5em; border-radius: 3px; font-size: 0.75em; margin-right: 0.5em;">
+                                    {{ category }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </article>
+        {% endfor %}
+    </section>
+{% endfor %}
+
+<!-- フィルター機能のJS -->
+<script>
+function filterPosts(category) {
+    const posts = document.querySelectorAll('.post-item');
+    const buttons = document.querySelectorAll('.filter-btn');
+    
+    // ボタンのアクティブ状態を更新
+    buttons.forEach(btn => btn.classList.remove('active'));
+    event.target.classList.add('active');
+    
+    // 投稿をフィルター
+    posts.forEach(post => {
+        if (category === 'all' || post.dataset.category.includes(category)) {
+            post.style.display = 'flex';
+        } else {
+            post.style.display = 'none';
+        }
+    });
+}
+</script>
+
+<style>
+.filter-btn {
+    background: var(--bg-accent);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    padding: 0.5em 1em;
+    margin: 0.25em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover, .filter-btn.active {
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+}
+</style>
