@@ -1,51 +1,103 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
 layout: default
 ---
 
-<!-- ヒーローセクション -->
-<div style="text-align: center; margin: 2em 0;">
-    <h2>失敗したての情報をほかほかのうちに</h2>
+<div style="text-align: center; margin: 2em 0 3em 0;">
+    <h2 style="font-weight: 300; color: var(--text-secondary); margin-bottom: 0.5em;">
+        失敗したての情報をほかほかのうちに
+    </h2>
+    <p style="color: var(--text-muted); font-size: 0.9em;">
+        学びと記録の静寂な空間
+    </p>
 </div>
 
-<!-- GitHub Activity -->
-<div id="clouds">...</div>
+<!-- GitHub Activity Section -->
+<div id="clouds" style="margin: 3em 0;">
+    <div class="github-chart" style="position: relative; z-index: 10; background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); border-radius: 8px; padding: 1.5em; margin: 1em; border: 1px solid var(--border-color);">
+        <h3 style="margin-top: 0; color: var(--text-primary); font-weight: 400; display: flex; align-items: center; gap: 0.5em;">
+            <span>📊</span> Development Activity
+        </h3>
+        <a href="https://github.com/alt9800" style="border: none; display: block;">
+            <img src="https://ghchart.rshah.org/495057/alt9800" 
+                 width="100%" 
+                 style="border-radius: 4px; opacity: 0.8;">
+        </a>
+        <p style="margin: 1em 0 0 0; color: var(--text-muted); font-size: 0.85em; text-align: center;">
+            GitHub でのコミット活動の軌跡
+        </p>
+    </div>
+</div>
 
-<!-- 最新記事（5-8件程度） -->
-<section>
-    <h2>最新の記録</h2>
-    {% for post in site.posts limit:6 %}
-        <!-- 記事カード -->
+<!-- 最新の投稿 -->
+{% if site.posts.size > 0 %}
+<section style="margin: 4em 0;">
+    <h2 style="font-weight: 400; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5em; display: flex; align-items: center; gap: 0.5em;">
+        <span>📝</span> 最新の記録
+    </h2>
+    
+    {% for post in site.posts limit:5 %}
+        <article style="margin: 1.5em 0; padding: 1.5em; background: var(--bg-accent); border-radius: 8px; border: 1px solid var(--border-color); box-shadow: 0 2px 10px var(--shadow-light); transition: all 0.3s ease;">
+            
+            <div style="display: flex; align-items: flex-start; gap: 1em;">
+                <time style="color: var(--text-muted); font-size: 0.8em; width: 60px; flex-shrink: 0; font-family: monospace;">
+                    {{ post.date | date: "%m/%d" }}
+                </time>
+                
+                <div style="flex: 1;">
+                    <h3 style="margin: 0 0 0.5em 0; font-size: 1.1em; font-weight: 400;">
+                        <a href="{{ post.url | relative_url }}" 
+                           style="color: var(--text-primary); border: none;">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+                    
+                    {% if post.excerpt %}
+                        <p style="margin: 0.5em 0; color: var(--text-secondary); font-size: 0.9em; line-height: 1.5;">
+                            {{ post.excerpt | strip_html | truncate: 100 }}
+                        </p>
+                    {% endif %}
+                    
+                    {% if post.categories.size > 0 %}
+                        <div style="margin-top: 0.75em;">
+                            {% for category in post.categories %}
+                                <span style="background: var(--bg-secondary); color: var(--text-muted); padding: 0.2em 0.5em; border-radius: 10px; font-size: 0.7em; margin-right: 0.5em;">
+                                    {{ category }}
+                                </span>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+            
+        </article>
     {% endfor %}
     
-    <div style="text-align: center;">
-        <a href="/posts/">すべての記録を見る →</a>
+    <div style="text-align: center; margin-top: 2em;">
+        <a href="{{ '/posts/' | relative_url }}" 
+           style="display: inline-block; padding: 0.75em 1.5em; background: var(--bg-secondary); color: var(--text-primary); border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.3s ease;">
+            すべての記録を見る →
+        </a>
     </div>
 </section>
+{% endif %}
 
-<style type="text/css">
-    #clouds { 
-        width: auto;
-     }    
- </style>
-
+<!-- Vanta.js の設定 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r121/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.clouds.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.waves.min.js"></script>
 <script>
-VANTA.CLOUDS({
+VANTA.WAVES({
   el: "#clouds",
   mouseControls: true,
   touchControls: true,
   gyroControls: false,
-  minHeight: 50.00,
+  minHeight: 200.00,
   minWidth: 200.00,
-  backgroundColor: 0xb0d7a1,
-  skyColor: 0xd78f68,
-  cloudColor: 0x8eabd7,
-  cloudShadowColor: 0x692d57,
-  sunlightColor: 0xd7b18b,
-  speed: 0.50
+  scale: 1.00,
+  scaleMobile: 1.00,
+  color: 0xe9ecef,
+  shininess: 30,
+  waveHeight: 15,
+  waveSpeed: 0.5,
+  zoom: 0.75
 })
 </script>

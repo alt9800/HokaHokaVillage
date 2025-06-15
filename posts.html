@@ -1,0 +1,87 @@
+---
+layout: default
+title: "記事一覧"
+permalink: /posts/
+---
+
+<div style="text-align: center; margin-bottom: 3em;">
+    <h1 style="font-weight: 300; margin-bottom: 0.5em;">すべての記録</h1>
+    <p style="color: var(--text-muted);">これまでの失敗と学びの軌跡</p>
+</div>
+
+<!-- カテゴリー別表示 -->
+{% assign categories = site.categories | sort %}
+{% if categories.size > 0 %}
+<div style="text-align: center; margin: 2em 0;">
+    <div style="display: inline-flex; flex-wrap: wrap; gap: 0.5em; justify-content: center;">
+        {% for category in categories %}
+            <span style="background: var(--bg-secondary); color: var(--text-primary); padding: 0.5em 1em; border-radius: 20px; font-size: 0.85em; border: 1px solid var(--border-color);">
+                {{ category[0] }} ({{ category[1].size }})
+            </span>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- 年別記事一覧 -->
+{% assign posts_by_year = site.posts | group_by_exp: "post", "post.date | date: '%Y'" | sort: "name" | reverse %}
+
+{% for year in posts_by_year %}
+<section style="margin: 3em 0;">
+    <h2 style="color: var(--text-secondary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5em; font-weight: 400;">
+        {{ year.name }}年 ({{ year.items.size }}件)
+    </h2>
+    
+    <div style="margin-top: 1.5em;">
+        {% for post in year.items %}
+            <article style="margin: 1em 0; padding: 1.5em; background: var(--bg-accent); border: 1px solid var(--border-color); border-radius: 8px; box-shadow: 0 2px 10px var(--shadow-light); transition: all 0.3s ease;">
+                
+                <div style="display: flex; align-items: flex-start; gap: 1em;">
+                    <time style="color: var(--text-muted); font-size: 0.85em; width: 60px; flex-shrink: 0; font-family: monospace;">
+                        {{ post.date | date: "%m/%d" }}
+                    </time>
+                    
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0 0 0.5em 0; font-size: 1.2em; font-weight: 400;">
+                            <a href="{{ post.url | relative_url }}" 
+                               style="color: var(--text-primary); border: none;">
+                                {{ post.title }}
+                            </a>
+                        </h3>
+                        
+                        {% if post.excerpt %}
+                            <p style="margin: 0.5em 0; color: var(--text-secondary); font-size: 0.9em; line-height: 1.5;">
+                                {{ post.excerpt | strip_html | truncate: 150 }}
+                            </p>
+                        {% endif %}
+                        
+                        {% if post.categories.size > 0 %}
+                            <div style="margin-top: 1em;">
+                                {% for category in post.categories %}
+                                    <span style="background: var(--bg-secondary); color: var(--text-muted); padding: 0.25em 0.5em; border-radius: 12px; font-size: 0.75em; margin-right: 0.5em;">
+                                        {{ category }}
+                                    </span>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+                
+            </article>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+
+{% if site.posts.size == 0 %}
+<div style="text-align: center; margin: 4em 0; color: var(--text-muted);">
+    <p>まだ記事がありません。</p>
+</div>
+{% endif %}
+
+<div style="text-align: center; margin: 3em 0;">
+    <a href="{{ '/' | relative_url }}" 
+       style="display: inline-block; padding: 0.75em 2em; background: var(--bg-secondary); color: var(--text-primary); border-radius: 6px; border: 1px solid var(--border-color); transition: all 0.3s ease;">
+        ← ホームに戻る
+    </a>
+</div>
