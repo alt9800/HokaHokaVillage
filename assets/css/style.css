@@ -266,7 +266,7 @@ th {
     100% { transform: rotate(360deg); }
 }
 
-/* OSM Grid Colors */
+/* OSM Grid */
 :root {
     --grid-color-empty: #ebedf0;
     --grid-color-1: #9be9a8;
@@ -275,16 +275,40 @@ th {
     --grid-color-4: #216e39;
 }
 
-/* GitHub風グリッドレイアウト */
+.osm-activity-container {
+    background: var(--bg-accent);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 2em;
+    margin: 3em 0;
+    box-shadow: 0 4px 20px var(--shadow-medium);
+}
+
+.osm-header {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 0 0 1.5em 0;
+    font-weight: 400;
+    color: var(--text-primary);
+    cursor: pointer;
+}
+
+.summary {
+    font-weight: 600;
+    color: var(--text-primary);
+    margin-bottom: 1em;
+    text-align: center;
+    font-size: 14px;
+}
+
 .grid-container {
     display: flex;
     gap: 3px;
     margin: 1em 0;
     overflow-x: auto;
-    padding-bottom: 10px;
 }
 
-/* 縦の曜日ラベル */
 .weekday-labels {
     display: flex;
     flex-direction: column;
@@ -301,12 +325,10 @@ th {
     align-items: center;
 }
 
-/* メイン グリッド エリア */
 .grid-wrapper {
     flex: 1;
 }
 
-/* 月ラベル */
 .month-labels {
     display: flex;
     margin-bottom: 2px;
@@ -315,13 +337,6 @@ th {
     height: 15px;
 }
 
-.month-label {
-    flex: 1;
-    text-align: left;
-    min-width: 0;
-}
-
-/* 週グリッド */
 .weeks-container {
     display: flex;
     gap: 2px;
@@ -339,22 +354,18 @@ th {
     border-radius: 2px;
     background-color: var(--grid-color-empty);
     cursor: pointer;
-    transition: all 0.2s ease;
 }
 
 .grid-day:hover {
-    stroke: rgba(0, 0, 0, 0.3);
-    stroke-width: 1px;
+    outline: 1px solid rgba(0, 0, 0, 0.3);
 }
 
-/* 貢献度別の色 */
 .grid-day[data-level="0"] { background-color: var(--grid-color-empty); }
 .grid-day[data-level="1"] { background-color: var(--grid-color-1); }
 .grid-day[data-level="2"] { background-color: var(--grid-color-2); }
 .grid-day[data-level="3"] { background-color: var(--grid-color-3); }
 .grid-day[data-level="4"] { background-color: var(--grid-color-4); }
 
-/* ツールチップ */
 .tooltip {
     position: absolute;
     background: var(--text-primary);
@@ -365,18 +376,7 @@ th {
     pointer-events: none;
     z-index: 1000;
     opacity: 0;
-    transition: opacity 0.2s;
     white-space: nowrap;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* 統計とサマリー */
-.summary {
-    font-weight: 600;
-    color: var(--text-primary);
-    margin-bottom: 1em;
-    text-align: center;
-    font-size: 14px;
 }
 
 .stats {
@@ -386,8 +386,6 @@ th {
     margin-top: 1em;
     font-size: 12px;
     color: var(--text-secondary);
-    flex-wrap: wrap;
-    gap: 1em;
 }
 
 .legend {
@@ -403,7 +401,6 @@ th {
     border-radius: 2px;
 }
 
-/* レスポンシブ対応 */
 @media (max-width: 768px) {
     .grid-day {
         width: 8px;
@@ -416,17 +413,5 @@ th {
     
     .month-labels {
         font-size: 9px;
-    }
-    
-    .month-label {
-        width: auto !important;
-    }
-    
-    .osm-activity-container {
-        padding: 1.5em;
-    }
-    
-    .summary {
-        font-size: 12px;
     }
 }
