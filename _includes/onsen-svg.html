@@ -1,0 +1,42 @@
+<svg viewBox="0 0 400 100" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: auto;">
+  <defs>
+    <!-- 湯気のパターン -->
+    <g id="steam">
+      <path d="M5,20 Q10,15 5,10 Q0,5 5,0" stroke="currentColor" stroke-width="1" fill="none" opacity="0.6"/>
+      <path d="M15,20 Q20,15 15,10 Q10,5 15,0" stroke="currentColor" stroke-width="1" fill="none" opacity="0.4"/>
+      <path d="M25,20 Q30,15 25,10 Q20,5 25,0" stroke="currentColor" stroke-width="1" fill="none" opacity="0.5"/>
+    </g>
+  </defs>
+  
+  <!-- 背景の山々 -->
+  <path d="M0,60 Q50,40 100,50 Q150,35 200,45 Q250,30 300,40 Q350,35 400,45 L400,100 L0,100 Z" 
+        stroke="currentColor" stroke-width="1" fill="none" opacity="0.3"/>
+  
+  <!-- 温泉の湯船 -->
+  <ellipse cx="200" cy="75" rx="80" ry="15" 
+           stroke="currentColor" stroke-width="1.5" fill="none"/>
+  
+  <!-- 温泉の石 -->
+  <circle cx="150" cy="78" r="8" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/>
+  <circle cx="250" cy="76" r="6" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/>
+  <circle cx="180" cy="82" r="4" stroke="currentColor" stroke-width="1" fill="none" opacity="0.7"/>
+  
+  <!-- 湯気 -->
+  <use href="#steam" transform="translate(160,45)" opacity="0.5"/>
+  <use href="#steam" transform="translate(190,50)" opacity="0.6"/>
+  <use href="#steam" transform="translate(220,47)" opacity="0.4"/>
+  
+  <!-- 温泉マーク♨️の線画版 -->
+  <g transform="translate(320,55)">
+    <circle cx="0" cy="0" r="3" stroke="currentColor" stroke-width="1" fill="none"/>
+    <path d="M-8,8 Q-5,5 -2,8 Q1,11 4,8" stroke="currentColor" stroke-width="1" fill="none"/>
+    <path d="M-6,15 Q-3,12 0,15 Q3,18 6,15" stroke="currentColor" stroke-width="1" fill="none"/>
+  </g>
+  
+  <!-- 遠くの木々 -->
+  <g opacity="0.4">
+    <path d="M80,55 L85,45 L90,55" stroke="currentColor" stroke-width="1" fill="none"/>
+    <path d="M310,50 L315,40 L320,50" stroke="currentColor" stroke-width="1" fill="none"/>
+    <path d="M50,58 L55,48 L60,58" stroke="currentColor" stroke-width="1" fill="none"/>
+  </g>
+</svg>

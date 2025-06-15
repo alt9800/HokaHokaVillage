@@ -1,20 +1,41 @@
-<header class="site-header" role="banner">
-  <div class="wrapper">
-    <a class="site-title" rel="author" href="{{ "/" | relative_url }}">
-      {{ site.title | escape }}
-    </a>
-    
-    <nav class="site-nav">
-      <div class="trigger">
-        {% for path in page_paths %}
-          {% assign my_page = site.pages | where: "path", path | first %}
-          {% if my_page.title %}
-            <a class="page-link" href="{{ my_page.url | relative_url }}">
-              {{ my_page.title | escape }}
-            </a>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </nav>
+<header class="site-header">
+  <!-- ロゴ部分 -->
+  <div class="site-brand">
+    <h1 class="site-title">
+      <a href="{{ '/' | relative_url }}" class="site-title-link">
+        <span class="site-title-main">{{ site.title }}</span>
+        <span class="site-title-sub">失敗したての情報をほかほかのうちに</span>
+      </a>
+    </h1>
   </div>
+  
+  <!-- ナビゲーション -->
+  <nav class="site-nav" role="navigation" aria-label="Main navigation">
+    <ul class="nav-list">
+      <li class="nav-item">
+        <a href="{{ '/' | relative_url }}" 
+           class="nav-link {% if page.url == '/' %}nav-link--active{% endif %}"
+           {% if page.url == '/' %}aria-current="page"{% endif %}>
+          <span class="nav-icon">🏠</span>
+          <span class="nav-text">ホーム</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ '/posts/' | relative_url }}" 
+           class="nav-link {% if page.url contains '/posts' %}nav-link--active{% endif %}"
+           {% if page.url contains '/posts' %}aria-current="page"{% endif %}>
+          <span class="nav-icon">📝</span>
+          <span class="nav-text">記事一覧</span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="{{ '/about/' | relative_url }}" 
+           class="nav-link {% if page.url == '/about/' %}nav-link--active{% endif %}"
+           {% if page.url == '/about/' %}aria-current="page"{% endif %}>
+          <span class="nav-icon">ℹ️</span>
+          <span class="nav-text">About</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
 </header>

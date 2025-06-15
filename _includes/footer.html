@@ -1,24 +1,69 @@
-<footer class="site-footer h-card">
-  <data class="u-url" href="{{ "/" | relative_url }}"></data>
+<footer class="site-footer">
+  <!-- 温泉線画 -->
+  <div class="footer-illustration">
+    {% include onsen-svg.html %}
+  </div>
   
-  <div class="wrapper">
-    <div class="footer-col-wrapper">
-      <div class="footer-col">
-        <p class="feed-subscribe">
-          <a href="{{ 'feed.xml' | relative_url }}">
-            <svg class="svg-icon orange">
-              <use xlink:href="{{ 'assets/minima-social-icons.svg#rss' | relative_url }}"></use>
-            </svg><span>Subscribe</span>
-          </a>
+  <!-- フッター内容 -->
+  <div class="footer-content">
+    <div class="footer-main">
+      <div class="footer-section">
+        <h3 class="footer-heading">ほかほか村</h3>
+        <p class="footer-description">
+          失敗したての情報を温泉のようにほかほかのうちに記録する場所
         </p>
-        <ul class="contact-list">
-          {% if site.email %}
-            <li><a class="u-email" href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-heading">リンク</h3>
+        <ul class="footer-links">
+          <li><a href="{{ '/' | relative_url }}" class="footer-link">ホーム</a></li>
+          <li><a href="{{ '/posts/' | relative_url }}" class="footer-link">記事一覧</a></li>
+          <li><a href="{{ '/about/' | relative_url }}" class="footer-link">About</a></li>
+          <li><a href="{{ '/feed.xml' | relative_url }}" class="footer-link">RSS</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-section">
+        <h3 class="footer-heading">外部リンク</h3>
+        <ul class="footer-links">
+          {% if site.github_username %}
+          <li>
+            <a href="https://github.com/{{ site.github_username }}" 
+               class="footer-link" target="_blank" rel="noopener">
+              GitHub
+            </a>
+          </li>
+          {% endif %}
+          <li>
+            <a href="https://hdyc.neis-one.org/?Alt9800" 
+               class="footer-link" target="_blank" rel="noopener">
+              OSM Profile
+            </a>
+          </li>
+          {% if site.twitter_username %}
+          <li>
+            <a href="https://twitter.com/{{ site.twitter_username }}" 
+               class="footer-link" target="_blank" rel="noopener">
+              Twitter
+            </a>
+          </li>
           {% endif %}
         </ul>
       </div>
-      <div class="footer-col">
-        <p>{{ site.description | escape }}</p>
+    </div>
+    
+    <!-- コピーライト -->
+    <div class="footer-bottom">
+      <div class="footer-copy">
+        <p>&copy; {{ 'now' | date: "%Y" }} {{ site.title }}. 
+           Powered by <a href="https://jekyllrb.com/" target="_blank" rel="noopener">Jekyll</a> 
+           & <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a></p>
+      </div>
+      
+      <!-- 小さな温泉マーク -->
+      <div class="footer-onsen-mark">
+        <span title="ほかほか♨️">♨️</span>
       </div>
     </div>
   </div>
