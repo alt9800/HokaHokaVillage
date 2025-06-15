@@ -2,6 +2,8 @@
 <html lang="{% if page.lang %}{{ page.lang }}{% else %}{{ site.lang | default: 'ja' }}{% endif %}">
 <head>
   {% include head.html %}
+  <link rel="icon" type="image/x-icon" href="/HokaHokaVillage/favicon.ico">
+  <link rel="shortcut icon" type="image/x-icon" href="/HokaHokaVillage/favicon.ico">
 </head>
 
 <body class="{% if page.layout %}layout-{{ page.layout }}{% endif %}{% if page.class %} {{ page.class }}{% endif %}">
