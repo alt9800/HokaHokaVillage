@@ -2,12 +2,174 @@
 layout: default
 ---
 
+<style>
+/* OSM Activity Widget Styles */
+.osm-activity-container {
+    background: var(--bg-accent, #161b22);
+    border-radius: 12px;
+    padding: 2em;
+    margin: 2em 0;
+    border: 1px solid var(--border-color, #30363d);
+    box-shadow: 0 2px 10px var(--shadow-light, rgba(0, 0, 0, 0.1));
+}
+
+.osm-header {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text-primary);
+    margin-bottom: 1em;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    transition: color 0.3s ease;
+}
+
+.osm-header:hover {
+    color: var(--link-color, #58a6ff);
+}
+
+.summary {
+    color: var(--text-secondary, #8b949e);
+    font-size: 0.9rem;
+    margin-bottom: 1.5em;
+}
+
+/* Activity Grid Styles */
+.activity-grid-wrapper {
+    background: var(--bg-primary, #0d1117);
+    border-radius: 8px;
+    padding: 1em;
+    border: 1px solid var(--border-color, #21262d);
+    overflow-x: auto;
+}
+
+.month-labels {
+    display: flex;
+    font-size: 0.75rem;
+    color: var(--text-muted, #8b949e);
+    margin-bottom: 0.5em;
+    position: relative;
+    height: 20px;
+}
+
+.month-label {
+    position: absolute;
+    white-space: nowrap;
+}
+
+.activity-grid {
+    display: grid;
+    grid-template-rows: repeat(7, 12px);
+    grid-auto-flow: column;
+    gap: 3px;
+}
+
+.grid-day {
+    width: 12px;
+    height: 12px;
+    border-radius: 2px;
+    background: var(--grid-color-empty, #161b22);
+    border: 1px solid var(--border-color, #21262d);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.grid-day:hover {
+    border-color: var(--link-color, #58a6ff);
+    transform: scale(1.2);
+    z-index: 10;
+}
+
+.grid-day[data-level="0"] { background: var(--grid-color-empty, #161b22); }
+.grid-day[data-level="1"] { background: var(--grid-color-1, #0e4429); }
+.grid-day[data-level="2"] { background: var(--grid-color-2, #006d32); }
+.grid-day[data-level="3"] { background: var(--grid-color-3, #26a641); }
+.grid-day[data-level="4"] { background: var(--grid-color-4, #39d353); }
+
+/* Stats Section */
+.stats {
+    margin-top: 1.5em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1em;
+}
+
+#totalContributions {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.legend {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.legend-item {
+    width: 10px;
+    height: 10px;
+    border-radius: 2px;
+}
+
+/* Tooltip */
+.tooltip {
+    position: fixed;
+    background: var(--bg-secondary, #21262d);
+    color: var(--text-primary);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+
+/* Loading State */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid var(--border-color);
+    border-top-color: var(--link-color);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .activity-grid {
+        grid-template-rows: repeat(7, 10px);
+        gap: 2px;
+    }
+    
+    .grid-day {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .osm-activity-container {
+        padding: 1.5em;
+    }
+}
+</style>
+
 <div style="text-align: center; margin: 2em 0 3em 0;">
     <h2 style="font-weight: 300; color: var(--text-secondary); margin-bottom: 0.5em;">
         失敗したての情報をほかほかのうちに
     </h2>
 </div>
-
 
 <!-- OSM Activity Section -->
 <div class="osm-activity-container">
@@ -16,11 +178,13 @@ layout: default
     </h3>
     
     <div class="summary" id="summary">
-        Loading...
+        <span class="loading-spinner"></span> Loading activity data...
     </div>
 
-    <!-- シンプルグリッド -->
-    <div class="simple-grid" id="simpleGrid"></div>
+    <div class="activity-grid-wrapper">
+        <div class="month-labels" id="monthLabels"></div>
+        <div class="activity-grid" id="activityGrid"></div>
+    </div>
 
     <div class="stats">
         <div id="totalContributions">Loading...</div>
@@ -35,7 +199,8 @@ layout: default
         </div>
     </div>
 </div>
-<!-- 最新の投稿 -->
+
+<!-- Latest Posts -->
 {% if site.posts.size > 0 %}
 <section style="margin: 4em 0;">
     <h2 style="font-weight: 400; color: var(--text-primary); border-bottom: 1px solid var(--border-color); padding-bottom: 0.5em; display: flex; align-items: center; gap: 0.5em;">
@@ -81,196 +246,255 @@ layout: default
 </section>
 {% endif %}
 
-
-<!-- ツールチップ -->
+<!-- Tooltip -->
 <div class="tooltip" id="tooltip"></div>
 
-<!-- OSM JavaScript -->
+<!-- OSM Activity Script -->
 <script>
-// 過去365日の日付配列を生成
-function getLast365Days() {
-    const dates = [];
-    const today = new Date();
+(function() {
+    const OVERPASS_URL = 'https://overpass-api.de/api/interpreter';
+    const USERNAME = 'Alt9800';
     
-    for (let i = 364; i >= 0; i--) {
-        const date = new Date(today);
-        date.setDate(today.getDate() - i);
-        dates.push(date.toISOString().split('T')[0]);
+    let activityData = {};
+    let tooltip = document.getElementById('tooltip');
+
+    // OSM プロフィールページを開く
+    function openOSMProfile() {
+        window.open('https://hdyc.neis-one.org/?Alt9800', '_blank');
     }
-    return dates;
-}
+    window.openOSMProfile = openOSMProfile;
 
-// 貢献度レベル計算
-function getContributionLevel(contributions) {
-    if (contributions === 0) return 0;
-    if (contributions <= 3) return 1;
-    if (contributions <= 6) return 2;
-    if (contributions <= 9) return 3;
-    return 4;
-}
-
-// OSM プロフィールページを開く
-function openOSMProfile() {
-    window.open('https://hdyc.neis-one.org/?Alt9800', '_blank');
-}
-
-// ツールチップ表示
-function showTooltip(e, date, contributions) {
-    const tooltip = document.getElementById('tooltip');
-    const dateObj = new Date(date);
-    const formattedDate = dateObj.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric'
-    });
-    
-    tooltip.innerHTML = contributions + ' contributions<br>' + formattedDate;
-    tooltip.style.opacity = '1';
-    tooltip.style.left = (e.pageX + 10) + 'px';
-    tooltip.style.top = (e.pageY - 50) + 'px';
-}
-
-function hideTooltip() {
-    document.getElementById('tooltip').style.opacity = '0';
-}
-
-// シンプルグリッド表示
-function displaySimpleGrid(data) {
-    const dates = getLast365Days();
-    const grid = document.getElementById('simpleGrid');
-    
-    console.log('Displaying grid with', dates.length, 'days');
-    grid.innerHTML = '';
-
-    // 最初の日の曜日を取得
-    const firstDate = new Date(dates[0]);
-    const startDayOfWeek = firstDate.getDay(); // 0=日曜日
-    
-    // 合計セル数（53週×7日）
-    const totalCells = 53 * 7;
-    
-    for (let i = 0; i < totalCells; i++) {
-        const dayElement = document.createElement('div');
-        dayElement.className = 'grid-day';
+    // 過去365日の日付配列を生成
+    function getLast365Days() {
+        const dates = [];
+        const today = new Date();
+        const startDate = new Date(today);
+        startDate.setDate(today.getDate() - 364);
         
-        // 実際の日付のインデックスを計算
-        const dateIndex = i - startDayOfWeek;
+        // 開始日を日曜日に調整
+        const startDayOfWeek = startDate.getDay();
+        startDate.setDate(startDate.getDate() - startDayOfWeek);
         
-        if (dateIndex >= 0 && dateIndex < dates.length) {
-            // 有効な日付
-            const date = dates[dateIndex];
+        // 終了日を土曜日に調整
+        const endDayOfWeek = today.getDay();
+        const endDate = new Date(today);
+        endDate.setDate(today.getDate() + (6 - endDayOfWeek));
+        
+        // 全ての日付を生成
+        const current = new Date(startDate);
+        while (current <= endDate) {
+            dates.push(current.toISOString().split('T')[0]);
+            current.setDate(current.getDate() + 1);
+        }
+        
+        return dates;
+    }
+
+    // 貢献度レベル計算
+    function getContributionLevel(contributions) {
+        if (contributions === 0) return 0;
+        if (contributions <= 2) return 1;
+        if (contributions <= 5) return 2;
+        if (contributions <= 10) return 3;
+        return 4;
+    }
+
+    // ツールチップ表示
+    function showTooltip(e, date, contributions) {
+        const dateObj = new Date(date);
+        const formattedDate = dateObj.toLocaleDateString('en-US', {
+            weekday: 'short',
+            month: 'short',
+            day: 'numeric',
+            year: 'numeric'
+        });
+        
+        tooltip.innerHTML = `<strong>${contributions} contributions</strong><br>${formattedDate}`;
+        tooltip.style.opacity = '1';
+        
+        const rect = e.target.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+        
+        // ツールチップをセルの上に配置
+        tooltip.style.left = (rect.left + rect.width / 2 - tooltipRect.width / 2) + 'px';
+        tooltip.style.top = (rect.top - tooltipRect.height - 10) + 'px';
+    }
+
+    function hideTooltip() {
+        tooltip.style.opacity = '0';
+    }
+
+    // グリッド表示
+    function displayGrid(data) {
+        const dates = getLast365Days();
+        const grid = document.getElementById('activityGrid');
+        const monthLabels = document.getElementById('monthLabels');
+        
+        grid.innerHTML = '';
+        monthLabels.innerHTML = '';
+        
+        // 月ラベルデータを準備
+        let monthLabelsData = [];
+        let currentMonth = -1;
+        let currentWeek = 0;
+        
+        dates.forEach((date, index) => {
+            const dateObj = new Date(date);
+            const dayOfWeek = dateObj.getDay();
+            const month = dateObj.getMonth();
+            
+            // 日曜日で新しい月の場合、ラベルを追加
+            if (dayOfWeek === 0) {
+                if (month !== currentMonth) {
+                    const monthName = dateObj.toLocaleDateString('en-US', { month: 'short' });
+                    monthLabelsData.push({
+                        name: monthName,
+                        week: currentWeek
+                    });
+                    currentMonth = month;
+                }
+                currentWeek++;
+            }
+            
+            // グリッドセルを作成
             const contributions = data[date] || 0;
             const level = getContributionLevel(contributions);
             
+            const dayElement = document.createElement('div');
+            dayElement.className = 'grid-day';
             dayElement.setAttribute('data-level', level);
+            dayElement.setAttribute('data-date', date);
+            dayElement.setAttribute('data-contributions', contributions);
             
             // イベントリスナー
-            dayElement.addEventListener('mouseenter', (e) => 
-                showTooltip(e, date, contributions));
+            dayElement.addEventListener('mouseenter', (e) => showTooltip(e, date, contributions));
             dayElement.addEventListener('mouseleave', hideTooltip);
-        } else {
-            // 空白セル
-            dayElement.style.visibility = 'hidden';
-        }
-        
-        grid.appendChild(dayElement);
-    }
-
-    // 統計更新
-    const total = Object.values(data).reduce((sum, val) => sum + val, 0);
-    const mappingDays = Object.values(data).filter(val => val > 0).length;
-    
-    document.getElementById('summary').textContent = 
-        mappingDays + ' mapping days with ' + total.toLocaleString() + ' changesets in the last year';
-    
-    document.getElementById('totalContributions').textContent = 
-        total.toLocaleString() + ' contributions in the last year';
-}
-
-// OSM データ取得
-async function fetchOSMData() {
-    try {
-        const query = '[out:json][timeout:60];(node(user:"Alt9800");way(user:"Alt9800");relation(user:"Alt9800"););out meta;';
-        
-        const response = await fetch('https://overpass-api.de/api/interpreter', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: 'data=' + encodeURIComponent(query)
+            
+            grid.appendChild(dayElement);
         });
-
-        if (!response.ok) {
-            throw new Error('API Error: ' + response.status);
-        }
-
-        const data = await response.json();
-        return processOSMData(data);
         
-    } catch (error) {
-        console.warn('API failed, using fallback data:', error);
-        return generateFallbackData();
+        // 月ラベルを配置
+        setTimeout(() => {
+            const gridRect = grid.getBoundingClientRect();
+            const totalWeeks = Math.ceil(dates.length / 7);
+            const weekWidth = gridRect.width / totalWeeks;
+            
+            monthLabelsData.forEach(monthData => {
+                const label = document.createElement('div');
+                label.className = 'month-label';
+                label.textContent = monthData.name;
+                label.style.left = (monthData.week * weekWidth) + 'px';
+                monthLabels.appendChild(label);
+            });
+        }, 100);
+        
+        // 統計更新
+        const total = Object.values(data).reduce((sum, val) => sum + val, 0);
+        const mappingDays = Object.values(data).filter(val => val > 0).length;
+        
+        document.getElementById('summary').textContent = 
+            `${mappingDays} mapping days with ${total.toLocaleString()} changesets in the last year`;
+        
+        document.getElementById('totalContributions').textContent = 
+            `${total.toLocaleString()} contributions in the last year`;
     }
-}
 
-// OSM データを処理
-function processOSMData(data) {
-    const processedData = {};
-    const dates = getLast365Days();
-    
-    // 全日付を0で初期化
-    dates.forEach(date => processedData[date] = 0);
+    // OSMデータ取得
+    async function fetchOSMData() {
+        try {
+            const query = `[out:json][timeout:60];
+(
+  node(user:"${USERNAME}");
+  way(user:"${USERNAME}");
+  relation(user:"${USERNAME}");
+);
+out meta;`;
 
-    if (data.elements && data.elements.length > 0) {
+            const response = await fetch(OVERPASS_URL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'data=' + encodeURIComponent(query)
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            return processOSMData(data);
+            
+        } catch (error) {
+            console.warn('Failed to fetch OSM data:', error);
+            // フォールバックデータを使用
+            return generateFallbackData();
+        }
+    }
+
+    // OSMデータを処理
+    function processOSMData(data) {
+        const processedData = {};
         const oneYearAgo = new Date();
-        oneYearAgo.setDate(oneYearAgo.getDate() - 365);
+        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
 
-        data.elements.forEach(element => {
-            if (element.timestamp) {
-                const elementDate = new Date(element.timestamp);
-                
-                if (elementDate >= oneYearAgo) {
-                    const dateStr = elementDate.toISOString().split('T')[0];
-                    if (processedData.hasOwnProperty(dateStr)) {
-                        processedData[dateStr]++;
+        if (data.elements && data.elements.length > 0) {
+            data.elements.forEach(element => {
+                if (element.timestamp) {
+                    const elementDate = new Date(element.timestamp);
+                    
+                    if (elementDate >= oneYearAgo) {
+                        const dateStr = elementDate.toISOString().split('T')[0];
+                        processedData[dateStr] = (processedData[dateStr] || 0) + 1;
                     }
+                }
+            });
+        }
+        
+        return processedData;
+    }
+
+    // フォールバックデータ生成
+    function generateFallbackData() {
+        const fallbackData = {};
+        const dates = getLast365Days();
+        
+        // よりリアルなパターンを生成
+        dates.forEach(date => {
+            const dayOfWeek = new Date(date).getDay();
+            let probability = 0.3;
+            
+            // 週末は活動が多い
+            if (dayOfWeek === 0 || dayOfWeek === 6) {
+                probability = 0.5;
+            }
+            
+            if (Math.random() < probability) {
+                const rand = Math.random();
+                if (rand < 0.6) {
+                    fallbackData[date] = Math.floor(Math.random() * 3) + 1;
+                } else if (rand < 0.9) {
+                    fallbackData[date] = Math.floor(Math.random() * 5) + 3;
+                } else {
+                    fallbackData[date] = Math.floor(Math.random() * 10) + 8;
                 }
             }
         });
-    }
-    
-    return processedData;
-}
-
-// フォールバック用サンプルデータ
-function generateFallbackData() {
-    const fallbackData = {};
-    const dates = getLast365Days();
-    
-    dates.forEach(date => {
-        const dayOfWeek = new Date(date).getDay();
-        let probability = 0.25;
-        if (dayOfWeek === 0 || dayOfWeek === 6) probability += 0.15;
         
-        if (Math.random() < probability) {
-            const rand = Math.random();
-            if (rand < 0.5) fallbackData[date] = Math.floor(Math.random() * 3) + 1;
-            else if (rand < 0.8) fallbackData[date] = Math.floor(Math.random() * 6) + 4;
-            else fallbackData[date] = Math.floor(Math.random() * 20) + 10;
-        } else {
-            fallbackData[date] = 0;
-        }
-    });
-    
-    return fallbackData;
-}
+        return fallbackData;
+    }
 
-// 初期化
-async function init() {
-    const data = await fetchOSMData();
-    displaySimpleGrid(data);
-}
+    // 初期化
+    async function init() {
+        const data = await fetchOSMData();
+        displayGrid(data);
+    }
 
-// ページ読み込み時に実行
-document.addEventListener('DOMContentLoaded', init);
+    // ページ読み込み時に実行
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+})();
 </script>
