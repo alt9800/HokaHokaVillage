@@ -38,7 +38,7 @@ permalink: /posts/
                 
                 <div style="display: flex; align-items: flex-start; gap: 1em;">
                     <time style="color: var(--text-muted); font-size: 0.85em; width: 60px; flex-shrink: 0; font-family: monospace;">
-                        {{ post.date | date: "%m/%d" }}
+                        {{ post.date | date: "%Y" }}<br>{{ post.date | date: "%m/%d" }}
                     </time>
                     
                     <div style="flex: 1;">
